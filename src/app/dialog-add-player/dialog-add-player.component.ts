@@ -11,9 +11,7 @@ import { MaterialModule } from '../materials/material.module';
 export class DialogAddPlayerComponent {
   name: string = '';
 
-  constructor(public dialogRef: MatDialogRef<DialogAddPlayerComponent>) {}
-
-  closeDialog() {}
+  constructor(private dialogRef: MatDialogRef<DialogAddPlayerComponent>) {}
 
   onNoClick(): void {
     this.dialogRef.close();
