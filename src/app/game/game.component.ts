@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { Game } from '../../models/game';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
@@ -15,15 +16,23 @@ import { PlayerComponent } from '../player/player.component';
   styleUrl: './game.component.scss',
 })
 export class GameComponent implements OnInit {
+  firestore: Firestore = inject(Firestore);
+  games$;
+
   pickCardAnimation = false;
   currentCard: string = '';
   game!: Game;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(private dialog: MatDialog) {
+    const aCollection = collection(this.firestore, 'games');
+    this.games$ = collectionData(aCollection);
+  }
 
   ngOnInit(): void {
     this.newGame();
-    console.log(this.game);
+    this.games$.subscribe((games) => {
+      console.log('Game updated:', games); // Hier kannst du die Daten ausgeben
+    });
   }
 
   newGame() {
